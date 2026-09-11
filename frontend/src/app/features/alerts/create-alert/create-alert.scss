@@ -1,0 +1,69 @@
+.alert-form { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.form-error {
+  background: var(--danger-soft); color: var(--danger);
+  border: 1px solid rgba(155,28,28,.2); border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem; font-size: 0.875rem;
+}
+
+.form-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+}
+
+.form-field {
+  display: flex; flex-direction: column; gap: 0.35rem;
+
+  &.form-field-full { grid-column: 1 / -1; }
+
+  label {
+    font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);
+    display: flex; gap: 0.2rem;
+  }
+
+  .required { color: var(--danger); }
+
+  select, textarea {
+    padding: 0.55rem 0.75rem; border: 1px solid var(--border);
+    border-radius: var(--radius-sm); font-size: 0.875rem;
+    background: #fbfcff; width: 100%;
+    transition: border-color 0.15s;
+
+    &:focus { border-color: var(--primary); outline: 2px solid rgba(26,86,219,.2);
+      background: #fff; }
+    &.invalid { border-color: var(--danger); }
+    &:disabled { opacity: 0.55; cursor: not-allowed; }
+  }
+
+  textarea { resize: vertical; min-height: 100px; }
+}
+
+.field-error { font-size: 0.75rem; color: var(--danger); }
+
+.field-footer { display: flex; justify-content: space-between; align-items: flex-start; }
+.character-count { font-size: 0.72rem; color: var(--text-muted); white-space: nowrap; margin-left: auto; }
+
+.form-actions {
+  display: flex; justify-content: flex-end; gap: 0.75rem;
+  padding-top: 0.5rem; border-top: 1px solid var(--border);
+}
+
+.secondary-button {
+  padding: 0.55rem 1.25rem; background: transparent;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  font-weight: 600; cursor: pointer; color: var(--text-secondary);
+  &:hover { background: var(--surface-muted); border-color: var(--border-strong); }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+.primary-button {
+  padding: 0.55rem 1.25rem; background: var(--primary); color: #fff;
+  border: none; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer;
+  box-shadow: 0 6px 14px var(--primary-glow);
+  &:hover { background: var(--primary-dark); transform: translateY(-1px); }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+}
+
+@media (max-width: 560px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .form-field.form-field-full { grid-column: 1; }
+}

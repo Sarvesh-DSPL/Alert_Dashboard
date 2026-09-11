@@ -1,0 +1,197 @@
+<section class="alert-details-page">
+
+  <div class="back-row">
+    <a routerLink="/alerts" class="back-link">
+      ← Back to Alerts
+    </a>
+  </div>
+
+
+  @if (loading) {
+
+    <div class="state-card">
+      <div class="spinner"></div>
+      <h2>Loading alert</h2>
+      <p>Please wait while the alert details are loaded.</p>
+    </div>
+
+  } @else if (error && !alert) {
+
+    <div class="state-card error-state">
+      <div class="state-icon">!</div>
+      <h2>Unable to load alert</h2>
+      <p>{{ error }}</p>
+
+      <a routerLink="/alerts" class="primary-button">
+        Back to Alerts
+      </a>
+    </div>
+
+  } @else if (alert) {
+
+    <header class="page-header">
+
+      <div>
+        <p class="eyebrow">Alert Details</p>
+
+        <h1>
+          {{ alert.type }}
+        </h1>
+
+        <p class="alert-id">
+          Alert #{{ alert.id }}
+        </p>
+      </div>
+
+      <div class="header-badges">
+
+        <span
+          class="badge severity"
+          [class.low]="alert.severity === 'Low'"
+          [class.medium]="alert.severity === 'Medium'"
+          [class.high]="alert.severity === 'High'"
+          [class.critical]="alert.severity === 'Critical'"
+        >
+          {{ alert.severity }}
+        </span>
+
+        <span
+          class="badge status"
+          [class.active]="alert.status === 'Active'"
+          [class.acknowledged]="alert.status === 'Acknowledged'"
+          [class.resolved]="alert.status === 'Resolved'"
+        >
+          {{ alert.status }}
+        </span>
+
+      </div>
+
+    </header>
+
+
+    @if (error) {
+      <div class="inline-error">
+        {{ error }}
+      </div>
+    }
+
+
+    <div class="details-grid">
+
+      <!-- Main information -->
+
+      <section class="details-card main-card">
+
+        <div class="card-title">
+          <h2>Alert Information</h2>
+        </div>
+
+        <div class="info-grid">
+
+          <div class="info-item">
+            <span>Alert ID</span>
+            <strong>#{{ alert.id }}</strong>
+          </div>
+
+          <div class="info-item">
+            <span>Alert Type</span>
+            <strong>{{ alert.type }}</strong>
+          </div>
+
+          <div class="info-item">
+            <span>Facility</span>
+            <strong>{{ alert.facilityName }}</strong>
+          </div>
+
+          <div class="info-item">
+            <span>Area</span>
+            <strong>{{ alert.area }}</strong>
+          </div>
+
+          <div class="info-item">
+            <span>Severity</span>
+            <strong>{{ alert.severity }}</strong>
+          </div>
+
+          <div class="info-item">
+            <span>Created</span>
+            <strong>{{ alert.createdAt | date:'medium' }}</strong>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- Description -->
+
+      <section class="details-card description-card">
+
+        <div class="card-title">
+          <h2>Description</h2>
+        </div>
+
+        <p class="description">
+          {{ alert.description }}
+        </p>
+
+      </section>
+
+
+      <!-- Status action -->
+
+      <section class="details-card status-card">
+
+        <div class="card-title">
+          <h2>Update Status</h2>
+          <span>Current: {{ alert.status }}</span>
+        </div>
+
+        <div class="status-actions">
+
+          <button
+            type="button"
+            class="status-button acknowledge"
+            [disabled]="
+              updating ||
+              alert.status === 'Acknowledged' ||
+              alert.status === 'Resolved'
+            "
+            (click)="acknowledgeAlert()"
+          >
+            {{ updating && alert.status !== 'Acknowledged'
+              ? 'Updating...'
+              : 'Acknowledge'
+            }}
+          </button>
+
+          <button
+            type="button"
+            class="status-button resolve"
+            [disabled]="
+              updating ||
+              alert.status === 'Resolved'
+            "
+            (click)="resolveAlert()"
+          >
+            {{ updating && alert.status !== 'Resolved'
+              ? 'Updating...'
+              : 'Resolve Alert'
+            }}
+          </button>
+
+        </div>
+
+        @if (alert.status === 'Resolved') {
+          <p class="resolved-message">
+            This alert has been resolved.
+          </p>
+        }
+
+      </section>
+
+    </div>
+
+  }
+
+</section>

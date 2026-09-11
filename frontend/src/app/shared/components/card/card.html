@@ -1,0 +1,27 @@
+<section
+  class="card"
+  [class.card-clickable]="clickable()"
+  [attr.role]="clickable() ? 'button' : null"
+  [attr.tabindex]="clickable() ? 0 : null"
+  (click)="onClick()"
+  (keydown.enter)="onClick()"
+  (keydown.space)="onClick(); $event.preventDefault()"
+>
+  @if (title() || subtitle()) {
+    <header class="card-header">
+      <div>
+        @if (title()) {
+          <h2>{{ title() }}</h2>
+        }
+
+        @if (subtitle()) {
+          <p>{{ subtitle() }}</p>
+        }
+      </div>
+    </header>
+  }
+
+  <div class="card-body">
+    <ng-content />
+  </div>
+</section>

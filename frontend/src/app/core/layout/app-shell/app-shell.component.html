@@ -1,0 +1,27 @@
+<div class="app-shell">
+  <app-header
+    (menuToggle)="toggleSidebar()"
+  />
+
+  <div class="app-body">
+    <app-sidebar
+      [open]="sidebarOpen()"
+      (navigationSelected)="closeSidebar()"
+    />
+
+    @if (sidebarOpen()) {
+      <button
+        type="button"
+        class="sidebar-backdrop"
+        aria-label="Close navigation"
+        (click)="closeSidebar()"
+      ></button>
+    }
+
+    <main class="main-content">
+      <div class="page-container">
+        <router-outlet />
+      </div>
+    </main>
+  </div>
+</div>

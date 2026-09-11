@@ -1,0 +1,220 @@
+<section class="dashboard-page">
+
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Overview</p>
+      <h1>Dashboard</h1>
+      <p>Monitor facility activity and alerts at a glance.</p>
+    </div>
+
+    <a routerLink="/alerts" class="view-alerts-button">
+      View All Alerts
+      <span>→</span>
+    </a>
+  </header>
+
+
+  <!-- Loading -->
+  @if (loading) {
+    <div class="state-card">
+      <div class="spinner"></div>
+      <h2>Loading dashboard</h2>
+      <p>Fetching the latest monitoring data.</p>
+    </div>
+  }
+
+
+  <!-- Error -->
+  @if (!loading && error) {
+    <div class="state-card error-state">
+      <div class="state-icon">!</div>
+
+      <h2>Dashboard unavailable</h2>
+
+      <p>{{ error }}</p>
+
+      <button
+        type="button"
+        class="retry-button"
+        (click)="loadDashboard()">
+        Try Again
+      </button>
+    </div>
+  }
+
+
+  <!-- Dashboard -->
+  @if (!loading && !error && stats) {
+
+    <section class="stats-grid">
+
+      <article class="stat-card">
+        <div class="stat-icon total">#</div>
+
+        <div>
+          <span>Total Alerts</span>
+          <strong>{{ stats.total }}</strong>
+        </div>
+      </article>
+
+
+      <article class="stat-card">
+        <div class="stat-icon critical">!</div>
+
+        <div>
+          <span>Critical Alerts</span>
+          <strong>{{ stats.critical }}</strong>
+        </div>
+      </article>
+
+
+      <article class="stat-card">
+        <div class="stat-icon active">●</div>
+
+        <div>
+          <span>Active Alerts</span>
+          <strong>{{ stats.active }}</strong>
+        </div>
+      </article>
+
+
+      <article class="stat-card">
+        <div class="stat-icon resolved">✓</div>
+
+        <div>
+          <span>Resolved Alerts</span>
+          <strong>{{ stats.resolved }}</strong>
+        </div>
+      </article>
+
+    </section>
+
+
+    <!-- Recent Alerts -->
+
+    <section class="recent-card">
+
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Latest Activity</p>
+          <h2>Recent Alerts</h2>
+        </div>
+
+        <a routerLink="/alerts">
+          View all →
+        </a>
+      </div>
+
+
+      @if (stats.recentAlerts?.length) {
+
+        <div class="alerts-list">
+
+          @for (alert of stats.recentAlerts; track alert.id) {
+
+            <a
+              class="alert-row"
+              [routerLink]="['/alerts', alert.id]">
+
+              <div class="alert-main">
+
+                <div class="alert-title">
+                  <strong>{{ alert.type }}</strong>
+
+                  <span
+                    class="severity-badge"
+                    [class.low]="alert.severity === 'Low'"
+                    [class.medium]="alert.severity === 'Medium'"
+                    [class.high]="alert.severity === 'High'"
+                    [class.critical]="alert.severity === 'Critical'">
+                    {{ alert.severity }}
+                  </span>
+                </div>
+
+                <span class="alert-location">
+                  {{ alert.facilityName }} · {{ alert.area }}
+                </span>
+
+              </div>
+
+
+              <div class="alert-meta">
+
+                <span
+                  class="status-badge"
+                  [class.active]="alert.status === 'Active'"
+                  [class.acknowledged]="alert.status === 'Acknowledged'"
+                  [class.resolved]="alert.status === 'Resolved'">
+                  {{ alert.status }}
+                </span>
+
+                <span class="alert-date">
+                  {{ alert.createdAt | date:'short' }}
+                </span>
+
+              </div>
+
+
+              <span class="row-arrow">→</span>
+
+            </a>
+
+          }
+
+        </div>
+
+      } @else {
+
+        <div class="empty-state">
+
+          <div class="empty-icon">✓</div>
+
+          <h3>No recent alerts</h3>
+
+          <p>
+            There are currently no recent alerts to display.
+          </p>
+
+        </div>
+
+      }
+
+    </section>
+
+
+    <!-- Quick Actions -->
+
+    <section class="quick-actions">
+
+      <a routerLink="/alerts" class="action-card alerts-action">
+
+        <div class="action-icon">!</div>
+
+        <div>
+          <strong>Manage Alerts</strong>
+          <span>Search, filter and review alerts</span>
+        </div>
+
+        <span>→</span>
+
+      </a>
+
+
+      <a routerLink="/facilities" class="action-card facilities-action">
+
+        <div class="action-icon">⌂</div>
+
+        <div>
+          <strong>View Facilities</strong>
+          <span>Monitor facility activity</span>
+        </div>
+
+        <span>→</span>
+
+      </a>
+
+    </section>
+
+  }
+
+</section>

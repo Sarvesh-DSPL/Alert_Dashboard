@@ -1,0 +1,28 @@
+.loading {
+  min-height: 160px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+
+  border: 2px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+
+  animation: loading-spin 0.7s linear infinite;
+}
+
+@keyframes loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

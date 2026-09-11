@@ -1,0 +1,141 @@
+<section class="facility-page">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Facility Management</p>
+      <h1>Facilities</h1>
+      <p class="page-description">
+        Monitor facility capacity, devices, and active alerts.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="refresh-button"
+      (click)="loadFacilities()"
+      [disabled]="loading()"
+    >
+      <span class="refresh-icon">↻</span>
+      Refresh
+    </button>
+  </div>
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="state-card">
+      <div class="spinner"></div>
+      <h2>Loading facilities</h2>
+      <p>Please wait while facility information is loaded.</p>
+    </div>
+  }
+
+  <!-- Error -->
+  @if (!loading() && error()) {
+    <div class="state-card error-state">
+      <div class="state-icon">!</div>
+      <h2>Unable to load facilities</h2>
+      <p>{{ error() }}</p>
+
+      <button
+        type="button"
+        class="retry-button"
+        (click)="loadFacilities()"
+      >
+        Try Again
+      </button>
+    </div>
+  }
+
+  <!-- Empty -->
+  @if (!loading() && !error() && facilities().length === 0) {
+    <div class="state-card">
+      <div class="state-icon">⌂</div>
+      <h2>No facilities found</h2>
+      <p>There are currently no facilities available.</p>
+    </div>
+  }
+
+  <!-- Facility Grid -->
+  @if (!loading() && !error() && facilities().length > 0) {
+    <div class="facility-grid">
+
+      @for (facility of facilities(); track facility.id) {
+        <article class="facility-card">
+
+          <div class="card-top">
+            <div class="facility-icon">
+              ⌂
+            </div>
+
+            <div class="facility-heading">
+              <h2>{{ facility.name }}</h2>
+              <p class="location">
+                <span aria-hidden="true">●</span>
+                {{ facility.location }}
+              </p>
+            </div>
+          </div>
+
+          <div class="facility-divider"></div>
+
+          <div class="facility-stats">
+
+            <div class="stat">
+              <span class="stat-icon">▦</span>
+              <div>
+                <strong>{{ facility.areaCount }}</strong>
+                <span>Areas</span>
+              </div>
+            </div>
+
+            <div class="stat">
+              <span class="stat-icon">◉</span>
+              <div>
+                <strong>{{ facility.cameraCount }}</strong>
+                <span>Cameras</span>
+              </div>
+            </div>
+
+            <div
+              class="stat"
+              [class.has-alerts]="facility.activeAlertCount > 0"
+            >
+              <span class="stat-icon">!</span>
+              <div>
+                <strong>{{ facility.activeAlertCount }}</strong>
+                <span>Active Alerts</span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="card-footer">
+            @if (facility.activeAlertCount > 0) {
+              <span class="alert-indicator">
+                {{ facility.activeAlertCount }} active
+              </span>
+            } @else {
+              <span class="healthy-indicator">
+                No active alerts
+              </span>
+            }
+
+            <button
+              type="button"
+              class="view-button"
+              (click)="viewFacility(facility.id)"
+              [attr.aria-label]="'View details for ' + facility.name"
+            >
+              View Details
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+
+        </article>
+      }
+
+    </div>
+  }
+
+</section>

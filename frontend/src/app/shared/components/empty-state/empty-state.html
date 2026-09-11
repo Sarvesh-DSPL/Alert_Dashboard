@@ -1,0 +1,25 @@
+<section
+  class="state"
+  aria-live="polite"
+>
+  <div
+    class="state-icon"
+    aria-hidden="true"
+  >
+    —
+  </div>
+
+  <h2>{{ title() }}</h2>
+
+  <p>{{ message() }}</p>
+
+  @if (actionLabel()) {
+    <button
+      type="button"
+      class="action-button"
+      (click)="action.emit()"
+    >
+      {{ actionLabel() }}
+    </button>
+  }
+</section>

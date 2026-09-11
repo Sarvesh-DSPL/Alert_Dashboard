@@ -1,0 +1,57 @@
+<header class="app-header">
+  <button
+    type="button"
+    class="menu-button"
+    aria-label="Toggle navigation"
+    (click)="onMenuToggle()"
+  >
+    ☰
+  </button>
+
+  <a routerLink="/dashboard" class="brand">
+    <span class="brand-icon">⌂</span>
+    <span>FacilityGuard</span>
+  </a>
+
+  <div class="profile-section">
+    <button
+      type="button"
+      class="profile-button"
+      aria-label="Open profile menu"
+      [attr.aria-expanded]="profileMenuOpen"
+      (click)="toggleProfileMenu()"
+    >
+      <span class="profile-avatar">A</span>
+      <span class="profile-name">Admin User</span>
+      <span class="profile-chevron" aria-hidden="true"></span>
+    </button>
+
+    @if (profileMenuOpen) {
+      <div class="profile-menu" role="menu">
+        <div class="profile-summary">
+          <span class="profile-avatar large">A</span>
+          <div>
+            <strong>Admin User</strong>
+            <span>admin&#64;facilityguard.com</span>
+          </div>
+        </div>
+
+        <div class="profile-divider"></div>
+
+        <button type="button" class="profile-menu-item" role="menuitem">
+          <span aria-hidden="true">◉</span>
+          Profile
+        </button>
+        <button
+          type="button"
+          class="profile-menu-item logout-item"
+          role="menuitem"
+          (click)="logout()"
+        >
+          <span aria-hidden="true">↪</span>
+          Logout
+        </button>
+      </div>
+    }
+  </div>
+</header>

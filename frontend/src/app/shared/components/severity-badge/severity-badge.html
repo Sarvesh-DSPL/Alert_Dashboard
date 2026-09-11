@@ -1,0 +1,7 @@
+<span
+  class="badge"
+  [class]="'badge badge-' + severity().toLowerCase()"
+  [attr.aria-label]="'Severity: ' + severity()"
+>
+  {{ severity() }}
+</span>

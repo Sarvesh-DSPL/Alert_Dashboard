@@ -1,0 +1,25 @@
+<nav class="sidebar" [class.open]="open()" aria-label="Main navigation">
+  <div class="sidebar-section">
+    <p class="section-label">Navigation</p>
+    @for (item of navigationItems; track item.route) {
+      <a
+        class="nav-item"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        (click)="onNavigationSelected()"
+        [attr.aria-label]="item.label"
+      >
+        <span class="nav-icon" aria-hidden="true">{{ item.icon }}</span>
+        {{ item.label }}
+      </a>
+    }
+  </div>
+
+  <div class="sidebar-profile" aria-label="Current user">
+    <span class="profile-avatar">A</span>
+    <div class="profile-details">
+      <strong>Admin User</strong>
+      <span>admin&#64;facilityguard.com</span>
+    </div>
+  </div>
+</nav>

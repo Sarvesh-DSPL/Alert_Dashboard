@@ -1,0 +1,7 @@
+<span
+  class="badge"
+  [class]="'badge badge-' + status().toLowerCase()"
+  [attr.aria-label]="'Status: ' + status()"
+>
+  {{ status() }}
+</span>

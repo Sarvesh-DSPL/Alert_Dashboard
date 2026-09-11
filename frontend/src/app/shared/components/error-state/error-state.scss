@@ -1,0 +1,68 @@
+.state {
+  min-height: 180px;
+  padding: 32px 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.state-icon {
+  width: 36px;
+  height: 36px;
+
+  display: grid;
+  place-items: center;
+
+  margin-bottom: 12px;
+
+  border-radius: 50%;
+
+  background: #fff0f0;
+  color: var(--danger);
+
+  font-weight: 800;
+}
+
+.state h2 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.state p {
+  max-width: 440px;
+
+  margin: 6px 0 16px;
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.retry-button {
+  min-height: 40px;
+  padding: 0 14px;
+
+  border: 1px solid var(--border);
+  border-radius: 8px;
+
+  background: var(--surface);
+  color: var(--text-primary);
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.retry-button:hover {
+  background: var(--surface-muted);
+}
+
+.retry-button:focus-visible {
+  outline: 3px solid rgb(29 95 209 / 25%);
+  outline-offset: 2px;
+}

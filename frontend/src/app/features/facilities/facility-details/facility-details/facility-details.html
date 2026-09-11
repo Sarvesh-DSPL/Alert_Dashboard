@@ -1,0 +1,205 @@
+<section class="details-page">
+
+  @if (loading()) {
+    <div class="state-card">
+      <div class="spinner"></div>
+      <h2>Loading facility</h2>
+      <p>Please wait while facility information is loaded.</p>
+    </div>
+  }
+
+  @if (!loading() && error()) {
+    <div class="state-card error-state">
+      <div class="state-icon">!</div>
+      <h2>Unable to load facility</h2>
+      <p>{{ error() }}</p>
+
+      <button
+        type="button"
+        class="back-button"
+        (click)="goBack()"
+      >
+        ← Back to Facilities
+      </button>
+    </div>
+  }
+
+  @if (!loading() && !error() && facility(); as currentFacility) {
+
+    <!-- Header -->
+    <header class="page-header">
+
+      <button
+        type="button"
+        class="back-link"
+        (click)="goBack()"
+      >
+        ← Back to Facilities
+      </button>
+
+      <div class="facility-title">
+        <div class="facility-icon">
+          ⌂
+        </div>
+
+        <div>
+          <p class="eyebrow">Facility Details</p>
+          <h1>{{ currentFacility.name }}</h1>
+          <p class="location">
+            <span aria-hidden="true">●</span>
+            {{ currentFacility.location }}
+          </p>
+        </div>
+      </div>
+
+    </header>
+
+    <!-- Summary -->
+    <section class="summary-grid" aria-label="Facility summary">
+
+      <article class="summary-card">
+        <div class="summary-icon">▦</div>
+        <div>
+          <span>Areas</span>
+          <strong>{{ currentFacility.areaCount }}</strong>
+        </div>
+      </article>
+
+      <article class="summary-card">
+        <div class="summary-icon">◉</div>
+        <div>
+          <span>Cameras</span>
+          <strong>{{ currentFacility.cameraCount }}</strong>
+        </div>
+      </article>
+
+      <article
+        class="summary-card"
+        [class.warning]="currentFacility.activeAlertCount > 0"
+      >
+        <div class="summary-icon">!</div>
+        <div>
+          <span>Active Alerts</span>
+          <strong>{{ currentFacility.activeAlertCount }}</strong>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- Areas -->
+    <section class="content-section">
+
+      <div class="section-header">
+        <div>
+          <h2>Monitored Areas</h2>
+          <p>Areas configured for this facility.</p>
+        </div>
+
+        <span class="section-count">
+          {{ currentFacility.areaCount }}
+        </span>
+      </div>
+
+      @if (currentFacility.areas?.length) {
+
+        <div class="areas-grid">
+          @for (area of currentFacility.areas; track area) {
+            <div class="area-card">
+              <span class="area-icon">⌂</span>
+              <span>{{ area }}</span>
+            </div>
+          }
+        </div>
+
+      } @else {
+
+        <div class="empty-section">
+          <p>No area information is available for this facility.</p>
+        </div>
+
+      }
+
+    </section>
+
+    <!-- Alerts -->
+    <section class="content-section">
+
+      <div class="section-header">
+        <div>
+          <h2>Facility Alerts</h2>
+          <p>Alerts associated with this facility.</p>
+        </div>
+
+        <span class="section-count">
+          {{ alerts().length }}
+        </span>
+      </div>
+
+      @if (alerts().length === 0) {
+
+        <div class="empty-section">
+          <div class="empty-icon">✓</div>
+          <h3>No alerts</h3>
+          <p>This facility currently has no recorded alerts.</p>
+        </div>
+
+      } @else {
+
+        <div class="alerts-list">
+
+          @for (alert of alerts(); track alert.id) {
+
+            <article
+              class="alert-row"
+              (click)="viewAlert(alert.id)"
+              tabindex="0"
+              role="button"
+              (keydown.enter)="viewAlert(alert.id)"
+            >
+
+              <div class="alert-main">
+                <h3>{{ alert.type }}</h3>
+
+                <div class="alert-meta">
+                  <span>{{ alert.area }}</span>
+                  <span>•</span>
+                  <span>{{ alert.createdAt | date:'medium' }}</span>
+                </div>
+              </div>
+
+              <div class="alert-status">
+                <span
+                  class="severity"
+                  [class.low]="alert.severity === 'Low'"
+                  [class.medium]="alert.severity === 'Medium'"
+                  [class.high]="alert.severity === 'High'"
+                  [class.critical]="alert.severity === 'Critical'"
+                >
+                  {{ alert.severity }}
+                </span>
+
+                <span
+                  class="status"
+                  [class.active]="alert.status === 'Active'"
+                  [class.acknowledged]="alert.status === 'Acknowledged'"
+                  [class.resolved]="alert.status === 'Resolved'"
+                >
+                  {{ alert.status }}
+                </span>
+
+                <span class="arrow" aria-hidden="true">→</span>
+              </div>
+
+            </article>
+
+          }
+
+        </div>
+
+      }
+
+    </section>
+
+  }
+
+</section>

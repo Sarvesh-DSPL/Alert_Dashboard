@@ -1,0 +1,392 @@
+<form
+  class="alert-form"
+  [formGroup]="alertForm"
+  (ngSubmit)="onSubmit()"
+  novalidate
+>
+
+
+  <!-- Load Error -->
+  @if (loadError) {
+
+    <div
+      class="form-error"
+      role="alert"
+    >
+      {{ loadError }}
+    </div>
+
+  }
+
+
+  <div class="form-grid">
+
+
+    <!-- =================================================
+         Alert Type
+         ================================================= -->
+
+    <div class="form-field">
+
+      <label for="alert-type">
+
+        Alert Type
+
+        <span class="required">
+          *
+        </span>
+
+      </label>
+
+
+      <select
+        id="alert-type"
+        formControlName="type"
+        [class.invalid]="isInvalid('type')"
+      >
+
+        <option value="">
+          @if (optionsLoading) {
+            Loading alert types...
+          } @else {
+            Select alert type
+          }
+        </option>
+
+
+        @for (
+          type of alertTypes;
+          track type
+        ) {
+
+          <option [value]="type">
+            {{ type }}
+          </option>
+
+        }
+
+      </select>
+
+
+      @if (isInvalid('type')) {
+
+        <span class="field-error">
+          Alert type is required.
+        </span>
+
+      }
+
+    </div>
+
+
+    <!-- =================================================
+         Facility
+         ================================================= -->
+
+    <div class="form-field">
+
+      <label for="facility">
+
+        Facility
+
+        <span class="required">
+          *
+        </span>
+
+      </label>
+
+
+      <select
+        id="facility"
+        formControlName="facilityId"
+        [class.invalid]="isInvalid('facilityId')"
+        (change)="onFacilityChange()"
+      >
+
+        <option [value]="0">
+
+          @if (facilitiesLoading) {
+
+            Loading facilities...
+
+          } @else {
+
+            Select facility
+
+          }
+
+        </option>
+
+
+        @for (
+          facility of facilities;
+          track facility.id
+        ) {
+
+          <option [value]="facility.id">
+            {{ facility.name }}
+          </option>
+
+        }
+
+      </select>
+
+
+      @if (isInvalid('facilityId')) {
+
+        <span class="field-error">
+          Facility is required.
+        </span>
+
+      }
+
+    </div>
+
+
+    <!-- =================================================
+         Area
+         ================================================= -->
+
+    <div class="form-field">
+
+      <label for="area">
+
+        Area
+
+        <span class="required">
+          *
+        </span>
+
+      </label>
+
+
+      <select
+        id="area"
+        formControlName="area"
+        [class.invalid]="isInvalid('area')"
+        [disabled]="
+          !alertForm.controls.facilityId.value ||
+          optionsLoading
+        "
+      >
+
+        <option value="">
+
+          @if (
+            !alertForm.controls.facilityId.value
+          ) {
+
+            Select facility first
+
+          } @else if (areas.length === 0) {
+
+            No areas available
+
+          } @else {
+
+            Select area
+
+          }
+
+        </option>
+
+
+        @for (
+          area of areas;
+          track area
+        ) {
+
+          <option [value]="area">
+            {{ area }}
+          </option>
+
+        }
+
+      </select>
+
+
+      @if (isInvalid('area')) {
+
+        <span class="field-error">
+          Area is required.
+        </span>
+
+      }
+
+    </div>
+
+
+    <!-- =================================================
+         Severity
+         ================================================= -->
+
+    <div class="form-field">
+
+      <label for="severity">
+
+        Severity
+
+        <span class="required">
+          *
+        </span>
+
+      </label>
+
+
+      <select
+        id="severity"
+        formControlName="severity"
+        [class.invalid]="isInvalid('severity')"
+      >
+
+        @for (
+          severity of severities;
+          track severity
+        ) {
+
+          <option [value]="severity">
+            {{ severity }}
+          </option>
+
+        }
+
+      </select>
+
+    </div>
+
+
+    <!-- =================================================
+         Description
+         ================================================= -->
+
+    <div class="form-field form-field-full">
+
+      <label for="description">
+
+        Description
+
+        <span class="required">
+          *
+        </span>
+
+      </label>
+
+
+      <textarea
+        id="description"
+        formControlName="description"
+        rows="5"
+        maxlength="1000"
+        placeholder="Describe the alert..."
+        [class.invalid]="isInvalid('description')"
+      ></textarea>
+
+
+      <div class="field-footer">
+
+        <div>
+
+          @if (
+            isInvalid('description')
+          ) {
+
+            <span class="field-error">
+
+              @if (
+                alertForm.controls.description
+                  .hasError('required')
+              ) {
+
+                Description is required.
+
+              }
+
+
+              @if (
+                alertForm.controls.description
+                  .hasError('minlength')
+              ) {
+
+                Description must contain at least
+                10 characters.
+
+              }
+
+            </span>
+
+          }
+
+        </div>
+
+
+        <span class="character-count">
+
+          {{
+            alertForm.controls.description.value.length
+          }}/1000
+
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =================================================
+       Submit Error
+       ================================================= -->
+
+  @if (submitError) {
+
+    <div
+      class="form-error"
+      role="alert"
+    >
+      {{ submitError }}
+    </div>
+
+  }
+
+
+  <!-- =================================================
+       Actions
+       ================================================= -->
+
+  <div class="form-actions">
+
+    <button
+      type="button"
+      class="secondary-button"
+      [disabled]="submitting"
+      (click)="cancelled.emit()"
+    >
+      Cancel
+    </button>
+
+
+    <button
+      type="submit"
+      class="primary-button"
+      [disabled]="
+        submitting ||
+        facilitiesLoading
+      "
+    >
+
+      @if (submitting) {
+
+        Creating...
+
+      } @else {
+
+        Create Alert
+
+      }
+
+    </button>
+
+  </div>
+
+</form>

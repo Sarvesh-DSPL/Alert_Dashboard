@@ -1,0 +1,219 @@
+<section class="alerts-page">
+
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Monitoring</p>
+      <h1>Alerts</h1>
+      <p>Monitor and manage alerts across all facilities.</p>
+    </div>
+    <button type="button" class="create-button" (click)="showCreateAlertModal = true">
+      <span>+</span> Create Alert
+    </button>
+  </header>
+
+  <!-- Filters -->
+  <section class="filters-card">
+    <div class="search-box">
+      <span class="search-icon">⌕</span>
+      <input
+        id="alert-search"
+        type="search"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchInput()"
+        placeholder="Search alerts by type, area, description..."
+        autocomplete="off"
+        aria-label="Search alerts"
+      />
+    </div>
+
+    <div class="filter-row">
+      <select
+        id="facility-filter"
+        [(ngModel)]="selectedFacilityId"
+        (ngModelChange)="onFilterChange()"
+        aria-label="Filter by facility"
+      >
+        <option [ngValue]="null">All Facilities</option>
+        @for (facility of facilities; track facility.id) {
+          <option [value]="facility.id">{{ facility.name }}</option>
+        }
+      </select>
+
+      <select
+        id="severity-filter"
+        [(ngModel)]="selectedSeverity"
+        (ngModelChange)="onFilterChange()"
+        aria-label="Filter by severity"
+      >
+        <option [ngValue]="null">All Severities</option>
+        @for (severity of severities; track severity) {
+          <option [value]="severity">{{ severity }}</option>
+        }
+      </select>
+
+      <select
+        id="status-filter"
+        [(ngModel)]="selectedStatus"
+        (ngModelChange)="onFilterChange()"
+        aria-label="Filter by status"
+      >
+        <option [ngValue]="null">All Statuses</option>
+        @for (status of statuses; track status) {
+          <option [value]="status">{{ status }}</option>
+        }
+      </select>
+
+      <div class="date-pair">
+        <div class="date-input" [class.has-value]="fromDate">
+          @if (!fromDate) {
+            <span class="date-placeholder">From</span>
+          }
+          <input id="from-date" type="date" aria-label="From date" [(ngModel)]="fromDate" (ngModelChange)="onFilterChange()" />
+        </div>
+      </div>
+
+      <div class="date-pair">
+        <div class="date-input" [class.has-value]="toDate">
+          @if (!toDate) {
+            <span class="date-placeholder">To</span>
+          }
+          <input id="to-date" type="date" aria-label="To date" [(ngModel)]="toDate" (ngModelChange)="onFilterChange()" />
+        </div>
+      </div>
+
+      <label class="page-size">
+        <select
+          id="alert-page-size"
+          [(ngModel)]="pageSize"
+          aria-label="Number of alerts to show"
+        >
+          @for (size of pageSizes; track size) {
+            <option [ngValue]="size">Show {{ size }} alerts</option>
+          }
+        </select>
+      </label>
+
+      <button type="button" class="clear-button" (click)="clearFilters()">
+        Clear Filters
+      </button>
+    </div>
+  </section>
+
+  <!-- Loading -->
+  @if (loading) {
+    <div class="state-card">
+      <div class="spinner"></div>
+      <h2>Loading alerts</h2>
+      <p>Please wait while alerts are loaded.</p>
+    </div>
+  }
+
+  <!-- Error -->
+  @if (!loading && error) {
+    <div class="state-card error-state">
+      <div class="state-icon">!</div>
+      <h2>Unable to load alerts</h2>
+      <p>{{ error }}</p>
+      <button type="button" class="retry-button" (click)="loadAlerts()">Try Again</button>
+    </div>
+  }
+
+  <!-- Empty -->
+  @if (!loading && !error && alerts.length === 0) {
+    <div class="state-card">
+      <div class="state-icon">✓</div>
+      <h2>No alerts found</h2>
+      <p>There are no alerts matching your current filters.</p>
+    </div>
+  }
+
+  <!-- Alerts Table -->
+  @if (!loading && !error && alerts.length > 0) {
+    <section class="alerts-card">
+      <div class="table-header">
+        <div>
+          <h2>Alert List</h2>
+          <span>
+            Showing {{ displayedAlerts.length }} of {{ alerts.length }}
+            alert{{ alerts.length === 1 ? '' : 's' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Alert</th>
+              <th scope="col">Facility</th>
+              <th scope="col">Area</th>
+              <th scope="col">Severity</th>
+              <th scope="col">Status</th>
+              <th scope="col">Created</th>
+              <th scope="col">Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (alert of displayedAlerts; track alert.id) {
+              <tr>
+                <td>
+                  <div class="alert-name">
+                    <strong>{{ alert.type }}</strong>
+                    <span class="alert-desc">{{ alert.description }}</span>
+                  </div>
+                </td>
+                <td>{{ alert.facilityName }}</td>
+                <td>{{ alert.area }}</td>
+                <td>
+                  <span class="badge severity"
+                    [class.low]="alert.severity === 'Low'"
+                    [class.medium]="alert.severity === 'Medium'"
+                    [class.high]="alert.severity === 'High'"
+                    [class.critical]="alert.severity === 'Critical'">
+                    {{ alert.severity }}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge status"
+                    [class.active]="alert.status === 'Active'"
+                    [class.acknowledged]="alert.status === 'Acknowledged'"
+                    [class.resolved]="alert.status === 'Resolved'">
+                    {{ alert.status }}
+                  </span>
+                </td>
+                <td class="created-date">{{ alert.createdAt | date:'short' }}</td>
+                <td class="arrow-cell">
+                  <a [routerLink]="['/alerts', alert.id]" [attr.aria-label]="'View alert ' + alert.id">→</a>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  }
+
+  <!-- Create Alert Modal -->
+  @if (showCreateAlertModal) {
+    <div class="modal-backdrop" (click)="showCreateAlertModal = false">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="create-alert-title"
+           (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow">New Alert</p>
+            <h2 id="create-alert-title">Create Alert</h2>
+          </div>
+          <button type="button" class="close-button" aria-label="Close dialog"
+                  (click)="showCreateAlertModal = false">×</button>
+        </div>
+        <div class="modal-body">
+          <app-create-alert
+            (created)="onAlertCreated($event)"
+            (cancelled)="showCreateAlertModal = false"
+          />
+        </div>
+      </div>
+    </div>
+  }
+
+</section>
