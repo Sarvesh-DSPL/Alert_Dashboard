@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="520" viewBox="0 0 1100 520">
+  <title>Smart Facility Monitoring Architecture</title>
+  <desc>Angular frontend communicates with FastAPI backend, which communicates with MySQL.</desc>
+  <rect width="1100" height="520" fill="white"/>
+  <text x="550" y="55" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="bold">Smart Facility Monitoring Architecture</text>
+
+  <rect x="80" y="150" width="280" height="190" rx="16" fill="#f4f4f4" stroke="#222" stroke-width="3"/>
+  <text x="220" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="27" font-weight="bold">Angular 22</text>
+  <text x="220" y="240" text-anchor="middle" font-family="Arial, sans-serif" font-size="18">Components &amp; Routing</text>
+  <text x="220" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="18">Services &amp; RxJS</text>
+  <text x="220" y="300" text-anchor="middle" font-family="Arial, sans-serif" font-size="18">Reactive Forms</text>
+
+  <rect x="410" y="150" width="280" height="190" rx="16" fill="#f4f4f4" stroke="#222" stroke-width="3"/>
+  <text x="550" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="27" font-weight="bold">FastAPI</text>
+  <text x="550" y="240" text-anchor="middle" font-family="Arial, sans-serif" font-size="18">Routers</text>
+  <text x="550" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="18">Services + Pydantic</text>
+  <text x="550" y="300" text-anchor="middle" font-family="Arial, sans-serif" font-size="18">SQLAlchemy ORM</text>
+
+  <rect x="740" y="150" width="280" height="190" rx="16" fill="#f4f4f4" stroke="#222" stroke-width="3"/>
+  <text x="880" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="27" font-weight="bold">MySQL</text>
+  <text x="880" y="245" text-anchor="middle" font-family="Arial, sans-serif" font-size="20">facilities</text>
+  <text x="880" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-size="20">alerts</text>
+  <text x="880" y="315" text-anchor="middle" font-family="Arial, sans-serif" font-size="16">Relational data store</text>
+
+  <line x1="360" y1="245" x2="410" y2="245" stroke="#222" stroke-width="4"/>
+  <polygon points="410,245 395,236 395,254" fill="#222"/>
+  <text x="385" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="16">HTTP / JSON</text>
+
+  <line x1="690" y1="245" x2="740" y2="245" stroke="#222" stroke-width="4"/>
+  <polygon points="740,245 725,236 725,254" fill="#222"/>
+  <text x="715" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="16">SQL</text>
+
+  <text x="550" y="410" text-anchor="middle" font-family="Arial, sans-serif" font-size="18">Angular → FastAPI → MySQL</text>
+  <text x="550" y="445" text-anchor="middle" font-family="Arial, sans-serif" font-size="15">Request flow: UI → REST API → ORM → Database → JSON response → UI</text>
+</svg>
